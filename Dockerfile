@@ -1,2 +1,2 @@
 FROM nginx:latest
-COPY ./ /usr/share/nginx/site
+COPY . /usr/share/nginx/site
