@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+ nginx-proxy:
+    image: jwilder/nginx-proxy
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - /etc/nginx/vhost.d
+      - /usr/share/nginx/html
+      - ./certs:/etc/nginx/certs:ro
+      - ./nginx-custom.conf:/etc/nginx/conf.d/custom.conf:ro
+    labels:
+      - com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy
+
+  www:
+    image:nginx:latest
+    restart: always
+    expose:
+      - '80'
+    volumes: - .:/usr/share/nginx/html
+    environment:
+      - VIRTUAL_HOST=www.adisolutions.com.co,adisolutions.com.co
+      - LETSENCRYPT_HOST=www.adisolutions.com.co,adisolutions.com.co
+      - LETSENCRYPT_EMAIL=andres.guerrero@adisolutions.com.co
+   
+volumes:
+  certs:
+  html:
+  vhostd:
