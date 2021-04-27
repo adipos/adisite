@@ -13,7 +13,9 @@ node{
    }
    stage('Run Container on Dev Server'){
      def dockerRun = 'docker run --name test-adi-site --expose 80 -e VIRTUAL_HOST=test.adisolutions.com.co -e LETSENCRYPT_HOST=test.adisolutions.com.co -e LETSENCRYPT_EMAIL=andres.guerrero@adisolutions.com.co --net nginx-ssl_default adisolutions/adisolutions.com:lts'
+     def removeContainer = 'docker rm --force test-adi-site'
      sshagent(['ssh-adi']) {
+       sh "ssh -o StrictHostKeyChecking=no root@209.145.50.68 ${removeContainer}"
        sh "ssh -o StrictHostKeyChecking=no root@209.145.50.68 ${dockerRun}"
      }
    }
